@@ -19,6 +19,10 @@ module.exports = {
         storageCapacity: {
             type: 'number',
             required: true,
+        },
+        packets: {
+            collection: 'packet',
+            via: 'warehouse'
         }
     },
 };
