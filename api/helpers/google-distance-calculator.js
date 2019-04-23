@@ -20,21 +20,23 @@ module.exports = {
         var distance = require('google-distance-matrix');
         distance.key('AIzaSyBnkFjDVec1TDd9tIwmYWyj6zI8buHST6k');
         var distanceCalculation = new Promise(function(resolve, reject) {
-            distance.matrix([inputs.addressTo], [inputs.addressFrom], function(err, distances) {
+            distance.matrix([inputs.addressTo], [inputs.addressFrom], function(err, {
+                rows
+            }) {
                 if (err) {
                     reject(err);
                 }
-                if (distances.rows[0].elements[0].status == 'OK') {
+                if (rows[0].elements[0].status == 'OK') {
                     resolve({
-                        time: distances.rows[0].elements[0].duration.value,
-                        lenght: distances.rows[0].elements[0].distance.value
+                        time: rows[0].elements[0].duration.value,
+                        lenght: rows[0].elements[0].distance.value
                     });
                 } else {
                     resolve({});
                 }
             })
         });
-        distanceCalculation.then(function(result) {
+        await distanceCalculation.then(function(result) {
             return exits.success(result);
         }, function(err) {
             return exits.error(err);
