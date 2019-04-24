@@ -30,6 +30,14 @@ module.exports = {
             client: 1,
             warehouse: warehouse.id
         }).fetch();
-        return exits.success(packetModel);
+
+        const packetPopulated = await Packet.find({id:packetModel.id}).populate('client').populate('warehouse');
+        delete packetPopulated[0].createdAt;
+        delete packetPopulated[0].updatedAt;
+        delete packetPopulated[0].client.updatedAt;
+        delete packetPopulated[0].client.createdAt;
+        delete packetPopulated[0].warehouse.updatedAt;
+        delete packetPopulated[0].warehouse.createdAt;
+        return exits.success(packetPopulated);
     }
 };
